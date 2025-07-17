@@ -6,6 +6,7 @@ import com.example.bankapplication.model.Client;
 
 public interface ClientService {
 
-    String createClient(ClientCreateDTO clientCreateDTO);
-    String updateClient(Long clientId, ClientUpdateDTO clientUpdateDTO);
+    Client createClient(ClientCreateDTO clientCreateDTO);
+    Client updateClient(Long clientId, ClientUpdateDTO clientUpdateDTO);
+    void deleteClient(Long clientId);
 }

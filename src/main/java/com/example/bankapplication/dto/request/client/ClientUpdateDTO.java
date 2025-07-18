@@ -1,4 +1,4 @@
-package com.example.bankapplication.dto;
+package com.example.bankapplication.dto.request.client;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

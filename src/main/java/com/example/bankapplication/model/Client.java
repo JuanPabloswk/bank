@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -51,4 +52,9 @@ public class Client {
 
     @Column(name = "modification_Date")
     private LocalDateTime modificationDate;
+
+
+
+    @OneToMany(mappedBy = "client")
+    private List<Account> accounts;
 }

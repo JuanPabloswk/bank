@@ -1,4 +1,4 @@
-package com.example.bankapplication.dto;
+package com.example.bankapplication.dto.request.client;
 
 import com.example.bankapplication.enums.IdentificationType;
 import jakarta.validation.constraints.Email;

@@ -3,8 +3,8 @@ package com.example.bankapplication.service.impl;
 import com.example.bankapplication.exception.ClientHasAccountsException;
 import com.example.bankapplication.exception.ClientUnderageException;
 import com.example.bankapplication.exception.ClientNotFoundException;
-import com.example.bankapplication.dto.ClientCreateDTO;
-import com.example.bankapplication.dto.ClientUpdateDTO;
+import com.example.bankapplication.dto.request.client.ClientCreateDTO;
+import com.example.bankapplication.dto.request.client.ClientUpdateDTO;
 import com.example.bankapplication.mapper.ClientMapper;
 import com.example.bankapplication.model.Client;
 import com.example.bankapplication.repository.ClientRepository;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.List;
 
 
 @Service
@@ -31,6 +32,16 @@ public class ClientServiceImpl implements ClientService {
         }
         Client client = clientMapper.createClient(clientCreateDTO);
         return clientRepository.save(client);
+    }
+
+    @Override
+    public Client getClientId(Long clientId) {
+        return clientRepository.findByClientId(clientId).orElseThrow(RuntimeException::new);
+    }
+
+    @Override
+    public List<Client> getAllClients() {
+        return clientRepository.findAll();
     }
 
     @Override

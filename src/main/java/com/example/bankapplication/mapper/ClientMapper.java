@@ -1,6 +1,6 @@
 package com.example.bankapplication.mapper;
 
-import com.example.bankapplication.dto.ClientCreateDTO;
+import com.example.bankapplication.dto.request.client.ClientCreateDTO;
 import com.example.bankapplication.model.Client;
 import org.springframework.stereotype.Component;
 
@@ -10,15 +10,17 @@ import java.time.LocalDateTime;
 public class ClientMapper {
 
     public Client createClient(ClientCreateDTO clientCreateDTO) {
-        return Client.builder()
-                .creationDate(LocalDateTime.now())
-                .names(clientCreateDTO.getNames())
-                .lastNames(clientCreateDTO.getLastNames())
-                .birthDate(clientCreateDTO.getBirthDate())
-                .email(clientCreateDTO.getEmail())
-                .identificationType(clientCreateDTO.getIdentificationType())
-                .identificationNumber(clientCreateDTO.getIdentificationNumber())
-                .modificationDate(LocalDateTime.now())
-                .build();
+        Client client = new Client();
+        client.setCreationDate(LocalDateTime.now());
+        client.setNames(clientCreateDTO.getNames());
+        client.setLastNames(clientCreateDTO.getLastNames());
+        client.setBirthDate(clientCreateDTO.getBirthDate());
+        client.setEmail(clientCreateDTO.getEmail());
+        client.setIdentificationType(clientCreateDTO.getIdentificationType());
+        client.setIdentificationNumber(clientCreateDTO.getIdentificationNumber());
+        client.setModificationDate(LocalDateTime.now());
+        return client;
     }
+
+
 }

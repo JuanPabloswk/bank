@@ -8,4 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountResponseDTO {
+
+    private double balance;
+    private String accountNumber;
+
 }

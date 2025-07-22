@@ -15,20 +15,21 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "transactions")
-public class Transactions {
+@Table(name = "transaction")
+public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "transaction_id", nullable = false)
     private Long transactionId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "operation_type", nullable = false)
-    private OperationType operationType;
 
     @Column(name = "amount", nullable = false)
     private Double amount;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "operation_type", nullable = false)
+    private OperationType operationType;
 
     @Column(name = "transaction_date", nullable = false)
     private LocalDateTime transactionDate;
@@ -36,6 +37,10 @@ public class Transactions {
 
 
     @ManyToOne
-    @JoinColumn(name = "account_id", nullable = false)
-    private Client client;
+    @JoinColumn(name = "source_account_id")
+    private Account sourceAccount;
+
+    @ManyToOne
+    @JoinColumn(name = "destination_account_id")
+    private Account destinationAccount;
 }

@@ -1,10 +1,9 @@
 package com.example.bankapplication.mapper;
 
 import com.example.bankapplication.dto.request.account.AccountCreateDTO;
+import com.example.bankapplication.dto.response.account.AccountResponseDTO;
 import com.example.bankapplication.enums.AccountStatus;
 import com.example.bankapplication.model.Account;
-import com.example.bankapplication.service.impl.ClientServiceImpl;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -20,5 +19,12 @@ public class AccountMapper {
     account.setAccountStatus(AccountStatus.ACTIVE);
     account.setCreatedAt(LocalDateTime.now());
     return account;
+    }
+
+    public AccountResponseDTO responseDTO(Account account) {
+        AccountResponseDTO accountResponseDTO = new AccountResponseDTO();
+        accountResponseDTO.setBalance(account.getBalance());
+        accountResponseDTO.setAccountNumber(account.getAccountNumber());
+        return accountResponseDTO;
     }
 }

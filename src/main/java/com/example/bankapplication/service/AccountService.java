@@ -10,7 +10,6 @@ public interface AccountService {
     Account createAccount(AccountCreateDTO accountCreateDTO);
     Account updateAccount(Long accountId, AccountUpdateDTO accountUpdateDTO);
     void deleteAccount(Long accountId);
-    void deposit(AccountOperationDTO accountOperationDTO);
-    void withdraw(AccountOperationDTO accountOperationDTO);
-    void transfer(AccountOperationDTO accountOperationDTO);
+    void deposit(Long accountId, AccountOperationDTO accountOperationDTO);
+    void withdraw(Long accountId, AccountOperationDTO accountOperationDTO);
 }

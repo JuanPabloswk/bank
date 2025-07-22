@@ -56,34 +56,38 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void withdraw(AccountOperationDTO accountOperationDTO) {
-        Account account = accountRepository.findByAccountId(accountOperationDTO.getClientId()).orElseThrow(RuntimeException::new);
-        if(account.getBalance() > 0 && account.getBalance() > accountOperationDTO.getAmount() && account.getAccountStatus() != AccountStatus.CANCELLED) {
-            account.setBalance(account.getBalance() - accountOperationDTO.getAmount());
-        }
-    }
+    public void deposit(Long accountId, AccountOperationDTO accountOperationDTO) {
+        Account account = accountRepository.findByAccountNumber(accountOperationDTO.getAccountNumber())
+                .orElseThrow(() -> new RuntimeException("Account not found"));
 
-    @Override
-    public void deposit(AccountOperationDTO accountOperationDTO) {
-        Account account = accountRepository.findByAccountId(accountOperationDTO.getClientId()).orElseThrow(RuntimeException::new);
-        if (accountOperationDTO.getAmount() > 0 && account.getAccountStatus() != AccountStatus.CANCELLED ) {
+        if (accountOperationDTO.getAmount() < 0) {
+            throw new RuntimeException("Amount must be greater than 0");
+        }
+        if (account.getAccountStatus() != AccountStatus.CANCELLED) {
             account.setBalance(account.getBalance() + accountOperationDTO.getAmount());
+
+            accountRepository.save(account);
         }
     }
 
     @Override
-    public void transfer(AccountOperationDTO accountOperationDTO) {
-        Account sourceAccount = accountRepository.findByAccountId(accountOperationDTO.getClientId()).orElseThrow(RuntimeException::new);
-        Account destinationaccount = accountRepository.findByAccountId(accountOperationDTO.getClientId()).orElseThrow(RuntimeException::new);
-        if(sourceAccount.getBalance() > 0 && accountOperationDTO.getAmount() > 0 && (sourceAccount.getAccountStatus() != AccountStatus.CANCELLED) || destinationaccount.getAccountStatus() != AccountStatus.CANCELLED) {
-            sourceAccount.setBalance(sourceAccount.getBalance() - accountOperationDTO.getAmount());
-        } else {
-            throw new RuntimeException("Not enough balance");
+    public void withdraw(Long accountId, AccountOperationDTO accountOperationDTO) {
+        Account account = accountRepository.findByAccountNumber(accountOperationDTO.getAccountNumber())
+                .orElseThrow(() -> new RuntimeException("Source account not found"));
+
+        if (account.getAccountStatus() == AccountStatus.CANCELLED) {
+            throw new RuntimeException("The account is cancelled and cannot process withdrawals.");
         }
-        if(accountOperationDTO.getAmount() > 0) {
-            destinationaccount.setBalance(destinationaccount.getBalance() + accountOperationDTO.getAmount());
-        } else  {
-            throw new RuntimeException("The Amount's value is negative");
+
+        if (accountOperationDTO.getAmount() <= 0) {
+            throw new RuntimeException("The withdrawal amount must be greater than 0.");
+        }
+
+        if (account.getBalance() < accountOperationDTO.getAmount()) {
+            throw new RuntimeException("Insufficient balance.");
+        }
+
+        account.setBalance(account.getBalance() - accountOperationDTO.getAmount());
+        accountRepository.save(account);
         }
     }
-}

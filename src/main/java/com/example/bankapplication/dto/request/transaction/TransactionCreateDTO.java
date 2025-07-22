@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TransactionDTO {
+public class TransactionCreateDTO {
 
-    private Long amount;
+    private double amount;
     private Long sourceAccountId;
     private Long destinationAccountId;
 }

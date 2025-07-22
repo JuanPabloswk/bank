@@ -1,6 +1,7 @@
 package com.example.bankapplication.mapper;
 
 import com.example.bankapplication.dto.request.client.ClientCreateDTO;
+import com.example.bankapplication.dto.response.client.ClientResponseDTO;
 import com.example.bankapplication.model.Client;
 import org.springframework.stereotype.Component;
 
@@ -22,5 +23,12 @@ public class ClientMapper {
         return client;
     }
 
+    public ClientResponseDTO responseDTO(Client client) {
+        ClientResponseDTO clientResponseDTO = new ClientResponseDTO();
+        clientResponseDTO.setNames(client.getNames());
+        clientResponseDTO.setLastNames(client.getLastNames());
+        clientResponseDTO.setEmail(client.getEmail());
+        return clientResponseDTO;
+    }
 
 }

@@ -1,17 +1,20 @@
 package com.example.bankapplication.dto.request.client;
 
+
 import com.example.bankapplication.enums.IdentificationType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
-public class ClientCreateDTO {
+public class  ClientCreateDTO {
 
     @NotBlank(message = "Names are required")
     @Size(min = 2, message = "Names must be at least 2 characters")
@@ -27,4 +30,5 @@ public class ClientCreateDTO {
 
     private IdentificationType identificationType;
     private String identificationNumber;
+
 }

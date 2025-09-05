@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class TransactionCreateDTO {
 
     private double amount;
-    private Long sourceAccountId;
-    private Long destinationAccountId;
+    private String sourceAccountNumber;
+    private String destinationAccountNumber;
 }

@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -13,7 +12,6 @@ import java.util.List;
 
 @Data
 @Entity
-@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "client")
@@ -50,11 +48,11 @@ public class Client {
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 
-    @Column(name = "modification_Date")
+    @Column(name = "modification_date")
     private LocalDateTime modificationDate;
 
 
 
     @OneToMany(mappedBy = "client")
-    private List<Account> accounts;
+    private List<Account>  accounts;
 }

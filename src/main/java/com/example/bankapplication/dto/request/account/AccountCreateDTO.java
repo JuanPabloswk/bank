@@ -10,6 +10,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class AccountCreateDTO {
 
+    private Long clientId;
     private ExemptGMF exemptGMF;
     private AccountType accountType;
 }

@@ -4,21 +4,20 @@ import com.example.bankapplication.dto.request.transaction.TransactionCreateDTO;
 import com.example.bankapplication.enums.OperationType;
 import com.example.bankapplication.model.Account;
 import com.example.bankapplication.model.Transaction;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.time.LocalDateTime;
 
-@Component
-public class TransactionMapper {
+@Mapper(componentModel = "spring", imports = {LocalDateTime.class, OperationType.class})
+public interface TransactionMapper {
 
-    public Transaction makeTransfer(TransactionCreateDTO dto, Account source, Account destination) {
-        Transaction transaction = new Transaction();
-        transaction.setOperationType(OperationType.TRANSFER);
-        transaction.setAmount(dto.getAmount());
-        transaction.setSourceAccount(source);
-        transaction.setDestinationAccount(destination);
-        transaction.setTransactionDate(LocalDateTime.now());
-        return transaction;
-    }
+    @Mapping(target = "operationType", expression = "java(OperationType.TRANSFER)")
+    @Mapping(target = "transactionDate", expression = "java(LocalDateTime.now())")
+    @Mapping(target = "sourceAccount", source = "source")
+    @Mapping(target = "destinationAccount", source = "destination")
+
+    Transaction makeTransfer(TransactionCreateDTO dto, Account source, Account destination);
 }
+
 

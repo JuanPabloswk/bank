@@ -4,27 +4,20 @@ import com.example.bankapplication.dto.request.account.AccountCreateDTO;
 import com.example.bankapplication.dto.response.account.AccountResponseDTO;
 import com.example.bankapplication.enums.AccountStatus;
 import com.example.bankapplication.model.Account;
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.time.LocalDateTime;
 
-@Component
-public class AccountMapper {
+@Mapper(componentModel = "spring", imports = {LocalDateTime.class, AccountStatus.class})
+public interface AccountMapper {
 
-    public Account createAccount(AccountCreateDTO accountCreateDTO, String uniqueAccountNumber) {
-    Account account = new Account();
-    account.setAccountType(accountCreateDTO.getAccountType());
-    account.setAccountNumber(uniqueAccountNumber);
-    account.setExemptGMF(accountCreateDTO.getExemptGMF());
-    account.setAccountStatus(AccountStatus.ACTIVE);
-    account.setCreatedAt(LocalDateTime.now());
-    return account;
-    }
+    @Mapping(target = "accountNumber", source = "uniqueAccountNumber")
+    @Mapping(target = "accountStatus", expression = "java(AccountStatus.ACTIVE)")
+    @Mapping(target = "createdAt", expression = "java(LocalDateTime.now())")
+    @Mapping(target = "updatedAt", ignore = true)
+    Account createAccount(AccountCreateDTO accountCreateDTO, String uniqueAccountNumber);
 
-    public AccountResponseDTO responseDTO(Account account) {
-        AccountResponseDTO accountResponseDTO = new AccountResponseDTO();
-        accountResponseDTO.setBalance(account.getBalance());
-        accountResponseDTO.setAccountNumber(account.getAccountNumber());
-        return accountResponseDTO;
-    }
+    AccountResponseDTO responseDTO(Account account);
 }
+

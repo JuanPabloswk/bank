@@ -2,6 +2,9 @@ package com.example.bankapplication.service.impl;
 
 import com.example.bankapplication.dto.request.transaction.TransactionCreateDTO;
 import com.example.bankapplication.enums.AccountStatus;
+import com.example.bankapplication.exception.CancelledAccountException;
+import com.example.bankapplication.exception.ClientNotFoundException;
+import com.example.bankapplication.exception.InvalidAmountException;
 import com.example.bankapplication.mapper.TransactionMapper;
 import com.example.bankapplication.model.Account;
 import com.example.bankapplication.model.Transaction;
@@ -21,27 +24,30 @@ public class TransactionImpl implements TransactionService {
 
     @Override
     public void transfer(TransactionCreateDTO transactionCreateDTO) {
-        Account sourceAccount = accountRepository.findByAccountId(transactionCreateDTO.getSourceAccountId())
-                .orElseThrow(() -> new RuntimeException("Source account not found"));
-        Account destinationAccount = accountRepository.findByAccountId(transactionCreateDTO.getDestinationAccountId())
-                .orElseThrow(() -> new RuntimeException("Destination account not found"));
+        Account sourceAccount = accountRepository.findByAccountNumber(transactionCreateDTO.getSourceAccountNumber())
+                .orElseThrow(() -> new ClientNotFoundException("Source account not found"));
+
+        Account destinationAccount = accountRepository.findByAccountNumber(transactionCreateDTO.getDestinationAccountNumber())
+                .orElseThrow(() -> new ClientNotFoundException("Destination account not found"));
 
         if (sourceAccount.getAccountStatus() == AccountStatus.CANCELLED ||
                 destinationAccount.getAccountStatus() == AccountStatus.CANCELLED) {
-            throw new RuntimeException("One of the accounts is cancelled.");
+            throw new CancelledAccountException("One of the accounts is cancelled.");
         }
 
         if (transactionCreateDTO.getAmount() <= 0) {
-            throw new RuntimeException("Transfer amount must be greater than 0.");
+            throw new InvalidAmountException("Transfer amount must be greater than 0.");
         }
 
         if (sourceAccount.getBalance() < transactionCreateDTO.getAmount()) {
-            throw new RuntimeException("Insufficient balance in source account.");
+            throw new InvalidAmountException("Insufficient balance in source account.");
         }
 
+        // actualizar saldos
         sourceAccount.setBalance(sourceAccount.getBalance() - transactionCreateDTO.getAmount());
         destinationAccount.setBalance(destinationAccount.getBalance() + transactionCreateDTO.getAmount());
 
+        // crear transacción
         Transaction transaction = transactionMapper.makeTransfer(transactionCreateDTO, sourceAccount, destinationAccount);
 
         accountRepository.save(sourceAccount);
@@ -49,3 +55,4 @@ public class TransactionImpl implements TransactionService {
         transactionRepository.save(transaction);
     }
 }
+
